@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "183543797361",
+    "firebase_url": "https://assassin-app-a9dec.firebaseio.com",
+    "project_id": "assassin-app-a9dec",
+    "storage_bucket": "assassin-app-a9dec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:183543797361:android:57a1b9d526bc423c956dd0",
+        "android_client_info": {
+          "package_name": "com.example.assassinapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "183543797361-9hq3ueaqqvslmnnn8080gsi9t8j4c6jk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.assassinapp",
+            "certificate_hash": "fa76687bdef9911d12603e3b96b72ddcf3609d0f"
+          }
+        },
+        {
+          "client_id": "183543797361-f287spljgcfi5p0ev3eac56ttss4fq1c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAJn75ULVDCGGXASB8YWWmbo26K3hUzxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "183543797361-f287spljgcfi5p0ev3eac56ttss4fq1c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
