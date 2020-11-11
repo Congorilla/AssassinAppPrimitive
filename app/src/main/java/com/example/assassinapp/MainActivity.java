@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private int aliveserial;
 
     @Override
+    //includeing initial settings and a welcome message
+    //receive Firebase datas
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -67,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         playersalive.add(username);
         refalive.setValue(playersalive);
         }
+    //There will be a pop-up that allows the user to change his name
+    //The change will be reurned to the online database
     public void changeUserName(View v){
         final EditText newname = new EditText(MainActivity.this);
         AlertDialog.Builder inputDialog =
@@ -83,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).show();
     }
+    //When the player is knocked out, he uses this button to remove himself from players alive
+    //The change will be reurned to the online database
     public void removeUser(View v){
         final EditText outkey = new EditText(MainActivity.this);
         AlertDialog.Builder inputDialog =
@@ -101,10 +107,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).show();
     }
+    //This point to another activity where the name of dead players are shown
     public void showPlayersDead(View v){
         Intent i = new Intent(MainActivity.this,DeadPlayers.class);
         startActivity(i);
     }
+    //This point to another activity where the name of players alive are shown
     public void showPlayersAlive(View v){
         Intent i = new Intent(MainActivity.this,AlivePlayers.class);
         startActivity(i);

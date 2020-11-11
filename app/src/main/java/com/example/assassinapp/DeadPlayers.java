@@ -14,7 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
+//Displaying all players dead, with button to go back to the main menu
 public class DeadPlayers extends Activity {
     private ArrayList<String> playersdead;
     private String output;
@@ -42,6 +42,7 @@ public class DeadPlayers extends Activity {
         TextView outputext = (TextView)findViewById(R.id.deadoutputext);
         outputext.setText(output);
     }
+    //Pointing to the mainmenu
     public void backToMainMenu(View v){
         Intent i = new Intent(DeadPlayers.this,MainActivity.class);
         startActivity(i);

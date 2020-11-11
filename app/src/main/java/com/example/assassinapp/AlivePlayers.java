@@ -19,6 +19,7 @@ public class AlivePlayers extends Activity {
     private ArrayList<String> playersalive;
     private String output;
     @Override
+    //Displaying all players dead, with button to go back to the main menu
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aliveplayers);
@@ -42,6 +43,7 @@ public class AlivePlayers extends Activity {
         TextView outputext = (TextView)findViewById(R.id.aliveoutputext);
         outputext.setText(output);
     }
+    //Pointing to the mainmenu
     public void backToMainMenu(View v){
         Intent i = new Intent(AlivePlayers.this,MainActivity.class);
         startActivity(i);
