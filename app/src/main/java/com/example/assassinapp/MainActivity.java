@@ -24,80 +24,54 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
-   /* private DatabaseReference refalive;
-    private DatabaseReference refdead; */
-    private ArrayList<String> playersalive;
-    private ArrayList<String> playersdead;
+    private DatabaseReference reference;
+    private ArrayList<Player> playerList;
+    private ArrayList<Player> dataShot;
     private static final String TAG = MainActivity.class.getName();
-    private Set<String> alive;
-    private Set<String> dead;
-    private SharedPreferences.Editor edit;
-    private String username;
+    private Player player;
+    private int userId;
     private TextView welcome;
-    private int aliveserial;
-    private int ifdead;
-
     @Override
     //includeing initial settings and a welcome message
     //receive Firebase datas
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        playersalive = new ArrayList<String>();
-        playersalive.add("Joe");
-        playersalive.add("Bill");
-        playersalive.add(username);
-        playersdead = new ArrayList<String>();
-        playersdead.add("Kay");
-        ifdead = 0;
-        welcome = (TextView) findViewById(R.id.welcome);
-        welcome.setText("Welcome, " + username + "!");
-        SharedPreferences mainsp = getSharedPreferences("MainSP",MODE_PRIVATE);
-        edit = mainsp.edit();
-
-
-        alive = new HashSet<>();
-        alive.addAll(playersalive);
-        dead = new HashSet<>();
-        dead.addAll(playersdead);
-
-        edit.putStringSet("alive",alive);
-        edit.putStringSet("dead",dead);
-        edit.commit();
-
-        /*refalive = FirebaseDatabase.getInstance().getReference("players alive");
-        refalive.addValueEventListener(new ValueEventListener() {
+        userId = 0;
+        dataShot = new ArrayList<Player>();
+        reference = FirebaseDatabase.getInstance().getReference("players alive");
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                playersalive = dataSnapshot.getValue(ArrayList.class);
-                Log.d(TAG, "The current players alive are : " + playersalive);
+                dataShot = dataSnapshot.getValue(ArrayList.class);
+                Log.d(TAG, "The current players are : " + dataShot);
             }
 
             public void onCancelled(DatabaseError error) {
                 Log.w(TAG, "Failed to read players.", error.toException());
             }
         });
-        refdead = FirebaseDatabase.getInstance().getReference("players dead");
-        refdead.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                playersdead = dataSnapshot.getValue(ArrayList.class);
-                Log.d(TAG, "The current players dead are : " + playersdead);
-            }
 
-            public void onCancelled(DatabaseError error) {
-                Log.w(TAG, "Failed to read players.", error.toException());
-            }
-        });*/
+        playerList = new ArrayList<Player>();
+        playerList.addAll(dataShot);
 
-        aliveserial = playersalive.size();
-        playersalive.add(username);
-        //refalive.setValue(playersalive);
+        player = new Player();
+        if(playerList.size()==0)
+            userId = 0;
+        else
+            userId = playerList.get(playerList.size()-1).getUid()+1;
+        player.setUid(userId);
+        playerList.add(player);
+
+        welcome = (TextView) findViewById(R.id.welcome);
+        welcome.setText("Welcome, " + player.getName() + "!");
+
+        reference.setValue(playerList);
         }
     //There will be a pop-up that allows the user to change his name
     //The change will be reurned to the online database
     public void changeUserName(View v){
-        if (ifdead==0) {
+        if (player.getStatus().equals("alive")) {
             AlertDialog.Builder inputDialog = new AlertDialog.Builder(MainActivity.this);
             final EditText newname = new EditText(MainActivity.this);
             inputDialog.setTitle("What name do you want to change to?").setView(newname);
@@ -105,14 +79,13 @@ public class MainActivity extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            username = newname.getText().toString();
-                            welcome.setText("Welcome, " + username + "!");
-                            playersalive.set(aliveserial, username);
-                            alive = new HashSet<>();
-                            alive.addAll(playersalive);
-                            edit.putStringSet("alive", alive);
-                            edit.commit();
-                            //refalive.setValue(playersalive);
+                            player.setName(newname.getText().toString());
+                            welcome.setText("Welcome, " + player.getName() + "!");
+                            for(int i=0; i<playerList.size();i++){
+                                if (userId==playerList.get(i).getUid())
+                                    playerList.set(i,player);
+                            }
+                            reference.setValue(playerList);
                         }
                     }).show();
         }
@@ -129,19 +102,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(outkey.getText().toString().equals("out")) {
-                            ifdead = 1;
+                            player.setStatus("dead");
                             welcome.setText("You are Dead");
-                            playersalive.remove(aliveserial);
-                            playersdead.add(username);
-                            alive = new HashSet<>();
-                            alive.addAll(playersalive);
-                            dead = new HashSet<>();
-                            dead.addAll(playersdead);
-                            edit.putStringSet("alive",alive);
-                            edit.putStringSet("dead",dead);
-                            edit.commit();
-                            //refalive.setValue(playersalive);
-                           //refdead.setValue(playersdead);
+                            for(int i=0; i<playerList.size();i++){
+                                if (userId==playerList.get(i).getUid())
+                                    playerList.set(i,player);
+                            }
+                            reference.setValue(playerList);
                         }
                     }
                 }).show();

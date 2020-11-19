@@ -20,36 +20,33 @@ import java.util.Set;
 
 //Displaying all players dead, with button to go back to the main menu
 public class DeadPlayers extends Activity {
-    private ArrayList<String> playersdead;
-    private String output;
+    private ArrayList<Player> playerList;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deadplayers);
         final String TAG = MainActivity.class.getName();
-        SharedPreferences sh = getSharedPreferences("MainSP",MODE_PRIVATE);
-        Set s = new HashSet<>();
-        s = sh.getStringSet("dead",null);
-        playersdead = new ArrayList<String>();
-        playersdead.addAll(s);
-        output = "";
-        /*DatabaseReference refdead= FirebaseDatabase.getInstance().getReference("players dead");;
-        refdead.addValueEventListener(new ValueEventListener() {
+        playerList = new ArrayList<Player>();
+        String output = new String("");
+        DatabaseReference reference= FirebaseDatabase.getInstance().getReference("players alive");;
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                playersdead = dataSnapshot.getValue(ArrayList.class);
-                Log.d(TAG, "The current players dead are : " + playersdead);
+                playerList = dataSnapshot.getValue(ArrayList.class);
+                Log.d(TAG, "The current players are : " + playerList);
             }
 
             public void onCancelled(DatabaseError error) {
                 Log.w(TAG, "Failed to read players.", error.toException());
             }
-        });*/
-        for(int i=0;i<playersdead.size();i++) {
-            if(i!=playersdead.size()-1)
-                output+=playersdead.get(i)+", ";
-            else
-                output+=playersdead.get(i);
+        });
+        for(int i=0;i<playerList.size();i++) {
+            if (playerList.get(i).getStatus().equals("dead")) {
+                if (i != playerList.size() - 1)
+                    output += playerList.get(i).getName() + ", ";
+                else
+                    output += playerList.get(i).getName();
+            }
         }
         TextView outputext = (TextView)findViewById(R.id.deadoutputext);
         outputext.setText(output);

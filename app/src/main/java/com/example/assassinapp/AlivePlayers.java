@@ -19,42 +19,39 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class AlivePlayers extends Activity {
-    private ArrayList<String> playersalive;
-    private String output;
+    private ArrayList<Player> playerList;
     @Override
     //Displaying all players alive, with button to go back to the main menu
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.aliveplayers);
         final String TAG = MainActivity.class.getName();
-        SharedPreferences sh = getSharedPreferences("MainSP",MODE_PRIVATE);
-        Set s = new HashSet<>();
-        s = sh.getStringSet("alive",null);
-        playersalive = new ArrayList<String>();
-        playersalive.addAll(s);
-        output = "";
-        /*DatabaseReference refalive= FirebaseDatabase.getInstance().getReference("players alive");;
-        refalive.addValueEventListener(new ValueEventListener() {
+        playerList = new ArrayList<Player>();
+        String output = new String("");
+        DatabaseReference reference= FirebaseDatabase.getInstance().getReference("players alive");;
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                playersalive = dataSnapshot.getValue(ArrayList.class);
-                Log.d(TAG, "The current players alive are : " + playersalive);
+                playerList = dataSnapshot.getValue(ArrayList.class);
+                Log.d(TAG, "The current players are : " + playerList);
             }
 
             public void onCancelled(DatabaseError error) {
                 Log.w(TAG, "Failed to read players.", error.toException());
             }
-        });*/
-        for(int i=0;i<playersalive.size();i++) {
-            if(i!=playersalive.size()-1)
-                output+=playersalive.get(i)+", ";
-            else
-                output+=playersalive.get(i);
+        });
+        for(int i=0;i<playerList.size();i++) {
+            if (playerList.get(i).getStatus().equals("alive")) {
+                if (i != playerList.size() - 1)
+                    output += playerList.get(i).getName() + ", ";
+                else
+                    output += playerList.get(i).getName();
+            }
         }
         TextView outputext = (TextView)findViewById(R.id.aliveoutputext);
         outputext.setText(output);
     }
-    //Pointing to the mainmenu
+    //Pointing to the main menu
     public void backToMainMenu(View v){
         Intent i = new Intent(AlivePlayers.this,MainActivity.class);
         startActivity(i);
