@@ -12,7 +12,13 @@ public class Player {
         status = "alive";
         score = 0;
         uid = 0;
-        target = new Player();
+    }
+
+    public Player(String n, int u){
+        name = n;
+        status = "alive";
+        score = 0;
+        uid = u;
     }
 
     public void setName(String s){

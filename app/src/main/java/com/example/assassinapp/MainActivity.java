@@ -37,9 +37,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        userId = 0;
         dataShot = new ArrayList<Player>();
+
+        Player player1 = new Player("John",0);
+        Player player2 = new Player("Sam",1);
+        Player player3 = new Player("Wick",2);
+        dataShot.add(player1);
+        dataShot.add(player2);
+        dataShot.add(player3);
+
         reference = FirebaseDatabase.getInstance().getReference("players alive");
+
+        reference.setValue(dataShot);//add
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
